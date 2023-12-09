@@ -12,32 +12,234 @@
 ## Part 1. Готовый докер
 
 1. Взять официальный докер образ с nginx и выкачать его при помощи `docker pull nginx`<br>
-    ![part 1.1](screenshots/1.png)
+    ![part 1.1](screenshots/Part_1/1.png)
 
 2. Проверить наличие докер образа через `docker images`<br>
-    ![part 1.2](screenshots/2.png)
+    ![part 1.2](screenshots/Part_1/2.png)
 
 3. Запустить докер образ через `docker run -d [image_id|repository]`<br>
-    * 
+    ![part 1.3](screenshots/Part_1/3.png)
 
-[Contents](#Contents)
+4. Проверить, что образ запустился через `docker ps`<br>
+    ![part 1.4](screenshots/Part_1/4.png)
+
+5. Посмотреть информацию о контейнере через `docker inspect [container_id|container_name]`<br>
+
+6. По выводу команды определить и поместить в отчёт размер контейнера, список замапленных портов и ip контейнера:<br>
+
+    1. Размер контейнера:<br>
+        ![part 1.5](screenshots/Part_1/5.png)
+
+    2. Список замапленных портов:<br>
+        ![part 1.6](screenshots/Part_1/6.png)
+
+    3. ip контейнера:<br>
+        ![part 1.7](screenshots/Part_1/7.png)
+
+7. Остановить докер образ через `docker stop [container_id|container_name]`<br>
+
+8. Проверить, что образ остановился через `docker ps`<br>
+    ![part 1.8](screenshots/Part_1/8.png)
+
+9. Запустить докер с портами 80 и 443 в контейнере, замапленными на такие же порты на локальной машине, через команду `run`<br>
+    ![part 1.9](screenshots/Part_1/9.png)
+
+10. Проверить, что в браузере по адресу **localhost:80** доступна стартовая страница nginx<br>
+    ![part 1.10](screenshots/Part_1/10.png)
+
+11. Перезапустить докер контейнер через `docker restart [container_id|container_name]`<br>
+
+12. Проверить любым способом, что контейнер запустился<br>
+    ![part 1.11](screenshots/Part_1/11.png)
+
+[Contents](#contents)
 
 ## Part 2. Операции с контейнером
 
-[Contents](#Contents)
+> P.S. Работа выполнялась в разное время, на разных контейрах, поэтому имена контейнеров и id отличаются от имени и id контейнера, созданного в Part 1.
+
+1. Прочитать конфигурационный файл nginx.conf внутри докер контейнера через команду `exec`<br>
+    * По умолчанию конфигурационный файл nginx.conf расположен в каталоге */usr/local/nginx/conf*, */etc/nginx* или */usr/local/etc/nginx*. На моей машине файл находится в каталоге /etc/nginx<br>
+        ![part 2.1](screenshots/Part_2/1.png)
+
+2. Создать на локальной машине файл nginx.conf<br>
+    ![part 2.2](screenshots/Part_2/2.png)
+
+3. Настроить в нем по пути /status отдачу страницы статуса сервера nginx<br>
+    ![part 2.3](screenshots/Part_2/3.png)
+
+4. Скопировать созданный файл nginx.conf внутрь докер образа через команду `docker cp`<br>
+    ![part 2.4](screenshots/Part_2/4.png)
+
+5. Перезапустить nginx внутри докер образа через команду `exec`<br>
+    ![part 2.5](screenshots/Part_2/5.png)
+
+6. Проверить, что по адресу localhost:80/status отдается страничка со статусом сервера nginx<br>
+    ![part 2.6](screenshots/Part_2/6.png)<br>
+    ![part 2.7](screenshots/Part_2/7.png)
+
+7. Экспортировать контейнер в файл container.tar через команду `export`<br>
+    ![part 2.8](screenshots/Part_2/8.png)
+
+8. Остановить контейнер<br>
+    ![part 2.9](screenshots/Part_2/9.png)
+
+9. Удалить образ через `docker rmi [image_id|repository]`, не удаляя перед этим контейнеры<br>
+    ![part 2.10](screenshots/Part_2/10.png)
+
+10. Удалить остановленный контейнер<br>
+    ![part 2.11](screenshots/Part_2/11.png)
+
+11. Импортировать контейнер обратно через команду `import`<br>
+    * Инструкция CMD в Dockerfile определяет команду, которая будет выполнена по умолчанию при запуске контейнера.<br>
+    ![part 2.12](screenshots/Part_2/12.png)
+
+12. Запустить импортированный контейнер<br>
+    ![part 2.13](screenshots/Part_2/13.png)
+
+13. Проверить, что по адресу localhost:80/status отдается страничка со статусом сервера nginx<br>
+    ![part 2.14](screenshots/Part_2/14.png)<br>
+    ![part 2.14](screenshots/Part_2/15.png)
+
+[Contents](#contents)
 
 ## Part 3. Мини веб-сервер
 
-[Contents](#Contents)
+1. Написать мини сервер на C и FastCgi, который будет возвращать простейшую страничку с надписью Hello World!<br>
+    * Установить библиотеку libfcgi-dev, выполнив команду `sudo apt-get install libfcgi-dev`:<br>
+        ![part 3.1](screenshots/Part_3/1.png)<br>
+
+    * Программа на C:<br>
+        ![part 3.2](screenshots/Part_3/2.png)<br>
+
+    * Скомпилировать server.c, выполнив команду `gcc server.c -lfcgi -o server`<br>
+        ![part 3.3](screenshots/Part_3/3.png)<br>
+
+2. Запустить написанный мини сервер через spawn-fcgi на порту 8080<br>
+    * Установить библиотеку spawn-fcgi, выполнив команду `sudo apt-get install spawn-fcgi`:<br>
+        ![part 3.4](screenshots/Part_3/4.png)<br>
+
+    * Запустить мини сервер через spawn-fcgi на порту 8080:<br>
+        ![part 3.5](screenshots/Part_3/5.png)<br>
+    
+> P.S. Дальше мне придется выполнять все то же самое, но внутри контейнера, потому что случится ошибка 502. В общем и целом запускать мини сервер следовало сразу внутри контейнера, но решил оставить эти манипуляции в отчете, т.к. убил много времени на это :(
+
+3. Написать свой nginx.conf, который будет проксировать все запросы с 81 порта на 127.0.0.1:8080<br>
+    1. Загрузить nginx, выполнив команду `docker pull nginx`:<br>
+        ![part 3.6](screenshots/Part_3/6.png)<br>
+    
+    2. Убедиться, что порт 81 не занят, выполнив команду `lsof -i :81`:<br>
+        ![part 3.7](screenshots/Part_3/7.png)<br>
+
+    3. Запустить докер с портом 81 в контейнере, замапленным на такой же порт на локальной машине, через команду `docker run -d -p 81:81 nginx`<br>
+        ![part 3.8](screenshots/Part_3/8.png)<br>
+
+    4. Создать на локальной машине файл nginx.conf<br>
+        ![part 3.9](screenshots/Part_3/9.png)<br>
+    
+    5. Настроить его на проксирование всех запросов с 81 порта на 127.0.0.1:8080<br>
+        ![part 3.10](screenshots/Part_3/10.png)<br>
+
+    6. Скопировать созданный файл nginx.conf и server.c внутрь докер образа через команду `docker cp`:<br>
+        ![part 3.11](screenshots/Part_3/11.png)<br>
+
+    7. Связать текущий терминал с терминалом контейнера objective_margulis командой `docker exec -it objective_margulis bash`:<br>
+        ![part 3.12](screenshots/Part_3/12.png)<br>
+    
+    8. Обновить пакеты командой `apt update`:<br>
+        ![part 3.13](screenshots/Part_3/13.png)<br>
+    
+    9. Установить gcc, spawn-fcgi, libfcgi-dev командой `apt install gcc spawn-fcgi libfcgi-dev`:<br>
+        ![part 3.14](screenshots/Part_3/14.png)<br>
+
+    10. Скомпилировать и перезапустить:<br>
+        ![part 3.15](screenshots/Part_3/15.png)<br>
+
+4. Проверить, что в браузере по localhost:81 отдается написанная вами страничка<br>
+    ![part 3.16](screenshots/Part_3/16.png)<br>
+
+5. Положить файл nginx.conf по пути ./nginx/nginx.conf (это понадобится позже)<br>
+
+[Contents](#contents)
 
 ## Part 4. Свой докер
 
-[Contents](#Contents)
+1. Написать свой докер образ, который:<br>
+
+    - собирает исходники мини сервера на FastCgi из [Части 3](#part-3-мини-веб-сервер)
+
+    - запускает его на 8080 порту
+
+    - копирует внутрь образа написанный ./nginx/nginx.conf
+
+    - запускает nginx.
+
+    >nginx можно установить внутрь докера самостоятельно, а можно воспользоваться готовым образом с nginx'ом, как базовым.
+
+    Создавать докер образ я буду с помощью Dockerfile.
+    
+    1. Написать bash-скрипт run.sh, который компилирует файл server.c из прошлого задания (для удобства его копия лежит в Part_4) и запускает его на 8080 порту:<br>
+        ![part 4.1](screenshots/Part_4/1.png)<br>
+    
+    2. nginx.conf берется из [Части 3](#part-3-мини-веб-сервер) (для удобства его копия лежит в Part_4/nginx/)
+        ![part 4.2](screenshots/Part_4/2.png)<br>
+    
+    3. Создать Dockerfile, с настройками будущего образа (следует избегать множественных вызовов команд `RUN`):<br>
+        ![part 4.3](screenshots/Part_4/3.png)<br>
+
+2. Собрать написанный докер образ через docker build при этом указав имя и тег<br>
+    ![part 4.4](screenshots/Part_4/4.png)<br>
+
+3. Проверить через docker images, что все собралось корректно<br>
+    ![part 4.5](screenshots/Part_4/5.png)<br>
+
+4. Запустить собранный докер образ с маппингом 81 порта на 80 на локальной машине и маппингом папки ./nginx внутрь контейнера по адресу, где лежат конфигурационные файлы nginx'а<br>
+    * `docker run -it -p 80:81 -v /home/emmonbea/Github/s21_SimpleDocker/src/Part_4/nginx/nginx.conf:/etc/nginx/nginx.conf -d my_server:latest bash`<br>
+        ![part 4.6](screenshots/Part_4/6.png)<br>
+
+5. Проверить, что по localhost:80 доступна страничка написанного мини сервера<br>
+    ![part 4.7](screenshots/Part_4/7.png)<br>
+
+6. Дописать в ./nginx/nginx.conf проксирование странички /status, по которой надо отдавать статус сервера nginx<br>
+    ![part 4.8](screenshots/Part_4/8.png)<br>
+
+7. Перезапустить докер образ<br>
+    ![part 4.9](screenshots/Part_4/9.png)<br>
+
+8. Проверить, что теперь по localhost:80/status отдается страничка со статусом nginx<br>
+    ![part 4.10](screenshots/Part_4/10.png)<br>
+
+[Contents](#contents)
 
 ## Part 5. Dockle
 
-[Contents](#Contents)
+1. Просканировать образ из предыдущего задания через `dockle [image_id|repository]`<br>
+    1. Установить dockle:<br>
+        ![part 5.1](screenshots/Part_5/1.png)<br>
+
+    2. Просканировать образ, выполнив команду `dockle [image_id|repository]`:<br>
+        ![part 5.2](screenshots/Part_5/2.png)<br>
+
+2. Исправить образ так, чтобы при проверке через dockle не было ошибок и предупреждений<br>
+    >P.S. Способы решения ошибок:<br>
+    **CIS-DI-0005** перед build'ом необходимо выполнить команду `export DOCKER_CONTENT_TRUST=1` и авторизоваться на DockerHub, но регистрироваться на DockerHub мне лень + у пира могут возникнуть проблемы.<br>
+    **CIS-DI-0010** переключения версии nginx проблему не решает. Мне помогло изменение образа. Если использовать в качестве базового образа nginx, то dockle необходимо запускать с дополнительными флагами. Команда будет выглядеть следующим образом `dockle -i CIS-DI-0010 [image_name]:[image_tag]`. Происходит это из-за запросов nginx ключей NGINX_GPGKEY.<br>
+    **UPD**: менять образ с nginx на ubuntu/nginx настоятельно не рекомендую. Проблемы возникнут при добавлении пользователя.<br>
+    **CIS-DI-0001** с ней возникло больше всего проблем. Как писалось выше основные проблемы с переключением пользователя возникали при смене базового образа nginx на ubuntu/nginx. Никакие заглушки и костыли не помогли. Дело в том, что у пользователя, отличного от root не будет прав на запуск скрипта (даже если скрипт запускается не как исполняемый файл, а через bash). Даже после того, как я ему даю все необходимые права, сервер не запускается. Еще проблемы могут возникнуть в отсутствии файла nginx.pid. Без него у меня не запускается nginx. Странно, но у пользователя root отсутствие этого файла nginx не смущало. Скорее всего можно файл и не создавать, а просто дать права на запись.<br>
+    **CIS-DI-0006** инструкция HEALTHCHECK используется для проверки состояния контейнера. В качестве аргументов передается `--interval=30s` - указывает интервал времени между проверками состояния контейнера;`--timeout=3s` - указывает максимальное время ожидания ответа от проверки состояния. Далее указывается команда, которая выполняется при каждой проверке состояния.
+
+    * Обновленный dockerfile:<br>
+        ![part 5.3](screenshots/Part_5/3.png)<br>
+
+    * Остальные файлы остались без изменений<br>
+
+    * Для удобства проверки предусмотрен скрипт ./Part_5/help.sh. В нем же можете посмотреть список всех используемых команд.<br>
+
+    * Результат сканирования образа с помощью dockle и вывод команды `curl localhost:80`
+        ![part 5.4](screenshots/Part_5/4.png)<br>
+
+[Contents](#contents)
 
 ## Part 6. Базовый Docker Compose
 
-[Contents](#Contents)
+[Contents](#contents)
