@@ -4,6 +4,5 @@ docker-compose build
 docker-compose up -d
 sleep 3
 curl http://localhost:80/
-# docker-compose logs server
-# docker-compose logs nginx
+sleep 3
 # docker-compose down
